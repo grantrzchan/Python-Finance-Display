@@ -4,9 +4,10 @@ import datetime
 import pandas as pd
 
 from api_keys import quandl_api_key
+from pandas.plotting import scatter_matrix
 
 start_date = datetime.datetime(2012,1,1)
-end_date = datetime.datetime(2019, 1, 1)
+end_date = datetime.datetime(2020, 1, 1)
 
 def stock_printer(start,end,ticker):
     return pdr.data.DataReader(ticker, 'quandl', start.date(), end.date(), api_key=quandl_api_key)
@@ -31,6 +32,10 @@ gm_stock['Total Traded'] = total_traded(gm_stock)
 ''' Print out the maxima in the stock prices'''
 tesla_max, ford_max, gm_max = map(lambda x: x.idxmax(), [tesla_stock['Total Traded'], ford_stock['Total Traded'], gm_stock['Total Traded']])
 print('\n', tesla_max, ford_max, gm_max)
+
+'''scatter plot'''
+car_companies = pd.concat([tesla_stock['Open'], ford_stock['Open'], gm_stock['Open']], axis=1)
+car_companies.columns = ['Tesla Open', 'Ford Open', 'GM Open']
 
 ''' Show the plots, using plot function in pandas-datareader '''
 fig, axes = plt.subplots(nrows=2,ncols=2)
@@ -57,6 +62,9 @@ plt3.legend()
 
 
 plt.tight_layout()
+
+plt4 = scatter_matrix(car_companies, figsize=(8,8), alpha=0.2, hist_kwds={'bins': 50})
+
 plt.show()
 
 
