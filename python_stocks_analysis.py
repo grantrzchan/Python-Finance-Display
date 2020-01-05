@@ -5,6 +5,9 @@ import pandas as pd
 
 from api_keys import quandl_api_key
 from pandas.plotting import scatter_matrix
+from mpl_finance import candlestick_ohlc
+#set minor ticks on other days, major on Mondays
+from matplotlib.dates import DateFormatter,date2num, WeekdayLocator, DayLocator, MONDAY
 
 start_date = datetime.datetime(2012,1,1)
 end_date = datetime.datetime(2020, 1, 1)
@@ -22,6 +25,10 @@ tesla_stock = stock_printer(start_date, end_date, 'TSLA')
 tesla_stock['Total Traded'] = total_traded(tesla_stock)
 tesla_stock['MA50'] = moving_average(tesla_stock, 50)
 tesla_stock['MA200'] = moving_average(tesla_stock, 100)
+tesla_reset = tesla_stock.loc['2018-01'].reset_index()
+# print(tesla_reset.info())
+tesla_reset['date_ax'] = tesla_reset['Date'].apply(lambda date: date2num(date)) #create numerical date column
+tesla_values = [tuple(vals) for vals in tesla_reset[['date_ax','Open','High','Low','Close']]]
 
 ford_stock = stock_printer(start_date, end_date, 'F')
 ford_stock['Total Traded'] = total_traded(ford_stock)
@@ -60,6 +67,10 @@ gm_stock['Total Traded'].plot(label='GM', ax=axes[1, 0])
 plt3.set_ylabel('US Dollars')
 plt3.legend()
 
+mondays = WeekdayLocator(MONDAY) # major ticks on Monday
+alldays = DayLocator() # minor ticks on every other day beside Mondays
+week_formatter = DateFormatter('%b %d') # format e.g., Jan 12
+day_formatter = DateFormatter('%b %d') # e.g., 12
 
 plt.tight_layout()
 
