@@ -16,7 +16,7 @@ def stock_printer(start,end,ticker):
     return pdr.data.DataReader(ticker, 'quandl', start.date(), end.date(), api_key=quandl_api_key)
 
 def total_traded(df):
-    return df[['Open', 'Close']].mean(axis=1)*df['Volume']
+    return df[['Open', 'Close']].mean(axis=1)*df['Volume']/pow(10,9)
 
 def moving_average(df, days):
     return df['Open'].rolling(days).mean()
@@ -68,7 +68,7 @@ plt3 = tesla_stock['Total Traded'].plot(label='Tesla', figsize=(
     12, 8), title='Total Traded', ax=axes[1, 0])
 ford_stock['Total Traded'].plot(label='Ford', ax=axes[1, 0])
 gm_stock['Total Traded'].plot(label='GM', ax=axes[1, 0])
-plt3.set_ylabel('US Dollars')
+plt3.set_ylabel('US Dollars, in billions')
 plt3.legend()
 
 mondays = WeekdayLocator(MONDAY) # major ticks on Monday
