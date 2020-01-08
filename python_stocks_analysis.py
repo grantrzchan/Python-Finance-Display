@@ -21,6 +21,9 @@ def total_traded(df):
 def moving_average(df, days):
     return df['Open'].rolling(days).mean()
 
+def returns(df):
+    return df['Close']/df['Close'].shift(1) - 1
+
 tesla_stock = stock_printer(start_date, end_date, 'TSLA')
 # print(tesla_stock)
 tesla_stock['Total Traded'] = total_traded(tesla_stock)
@@ -32,12 +35,15 @@ tesla_reset['date_ax'] = tesla_reset['Date'].apply(lambda date: date2num(date)) 
 tesla_values = [tuple(vals) for vals in tesla_reset[[
     'date_ax', 'Open', 'High', 'Low', 'Close']].values]
 # print(tesla_values)
+tesla_stock['Returns'] = returns(tesla_stock)
 
 ford_stock = stock_printer(start_date, end_date, 'F')
 ford_stock['Total Traded'] = total_traded(ford_stock)
+ford_stock['Returns'] = returns(ford_stock)
 
 gm_stock = stock_printer(start_date, end_date, 'GM')
 gm_stock['Total Traded'] = total_traded(gm_stock)
+gm_stock['Returns'] = returns(gm_stock)
 
 ''' Print out the maxima in the stock prices'''
 tesla_max, ford_max, gm_max = map(lambda x: x.idxmax(), [tesla_stock['Total Traded'], ford_stock['Total Traded'], gm_stock['Total Traded']])
@@ -84,6 +90,14 @@ plt4_axes.xaxis.set_major_formatter(week_formatter)
 plt4_axes.set_xlabel('Date')
 plt4_axes.set_ylabel('US Dollars/share')
 candlestick_ohlc(plt4_axes,tesla_values,width=0.6,colorup='g',colordown='r')
+
+fig2, axes2 = plt.subplots(nrows=2, ncols=2)
+fig2.subplots_adjust(bottom=0.2)
+plt6 = tesla_stock['Returns'].hist(figsize=(10, 8), label='Tesla', ax=axes2[0, 0], bins=100, color='m', alpha=0.4)
+ford_stock['Returns'].hist(figsize=(10, 8), label='Ford', ax=axes2[0, 0], bins=100, color='g', alpha=0.4)
+gm_stock['Returns'].hist(figsize=(10, 8), label='GM', ax=axes2[0, 0], bins=100, color='b', alpha=0.4)
+plt6.legend()
+
 
 plt.tight_layout()
 
