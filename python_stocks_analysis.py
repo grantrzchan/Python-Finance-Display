@@ -2,6 +2,7 @@ import pandas_datareader as pdr
 import matplotlib.pyplot as plt
 import datetime
 import pandas as pd
+import scipy
 
 from api_keys import quandl_api_key
 from pandas.plotting import scatter_matrix
@@ -97,6 +98,11 @@ plt6 = tesla_stock['Returns'].hist(figsize=(10, 8), label='Tesla', ax=axes2[0, 0
 ford_stock['Returns'].hist(figsize=(10, 8), label='Ford', ax=axes2[0, 0], bins=100, color='g', alpha=0.4)
 gm_stock['Returns'].hist(figsize=(10, 8), label='GM', ax=axes2[0, 0], bins=100, color='b', alpha=0.4)
 plt6.legend()
+
+plt7 = tesla_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='Tesla', ax=axes2[0, 1], color='m')
+ford_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='Ford', ax=axes2[0, 1], color='g')
+gm_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='GM', ax=axes2[0, 1], color='b')
+plt7.legend()
 
 
 plt.tight_layout()
