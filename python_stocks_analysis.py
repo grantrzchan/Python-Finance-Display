@@ -1,6 +1,7 @@
 import pandas_datareader as pdr
 import matplotlib.pyplot as plt
 import datetime
+import numpy
 import pandas as pd
 import scipy
 
@@ -116,8 +117,13 @@ plt9 = box_df.plot(kind='scatter', x='Ford Returns', y='GM Returns', figsize=(12
 plt.tight_layout()
 
 plt5 = scatter_matrix(car_companies, figsize=(8,8), alpha=0.2, hist_kwds={'bins': 50}) #use alpha to adjust data point transparency
+
+axes10 = plt.plot(nrows=1,ncols=1)
 plt10 = scatter_matrix(box_df, figsize=(8, 8), alpha=0.2, hist_kwds={
                       'bins': 100})  # use alpha to adjust data point transparency
+# new_labels = [round(float(i.get_text()), 2)
+#               for i in axes10[0,0].get_yticklabels()]
+# axes10[0, 0].set_yticklabels(new_labels)
 
 plt.show()
 
