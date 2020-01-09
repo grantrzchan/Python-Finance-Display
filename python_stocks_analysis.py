@@ -92,22 +92,32 @@ plt4_axes.set_xlabel('Date')
 plt4_axes.set_ylabel('US Dollars/share')
 candlestick_ohlc(plt4_axes,tesla_values,width=0.6,colorup='g',colordown='r')
 
+plt.tight_layout()
+
 fig2, axes2 = plt.subplots(nrows=2, ncols=2)
 fig2.subplots_adjust(bottom=0.2)
-plt6 = tesla_stock['Returns'].hist(figsize=(10, 8), label='Tesla', ax=axes2[0, 0], bins=100, color='m', alpha=0.4)
-ford_stock['Returns'].hist(figsize=(10, 8), label='Ford', ax=axes2[0, 0], bins=100, color='g', alpha=0.4)
-gm_stock['Returns'].hist(figsize=(10, 8), label='GM', ax=axes2[0, 0], bins=100, color='b', alpha=0.4)
+plt6 = tesla_stock['Returns'].hist(figsize=(12, 8), label='Tesla', ax=axes2[0, 0], bins=100, color='m', alpha=0.4)
+ford_stock['Returns'].hist(figsize=(12, 8), label='Ford', ax=axes2[0, 0], bins=100, color='g', alpha=0.4)
+gm_stock['Returns'].hist(figsize=(12, 8), label='GM', ax=axes2[0, 0], bins=100, color='b', alpha=0.4)
 plt6.legend()
 
-plt7 = tesla_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='Tesla', ax=axes2[0, 1], color='m')
-ford_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='Ford', ax=axes2[0, 1], color='g')
-gm_stock['Returns'].plot(kind='kde', figsize=(10, 8), label='GM', ax=axes2[0, 1], color='b')
+plt7 = tesla_stock['Returns'].plot(kind='kde', figsize=(12, 8), label='Tesla', ax=axes2[0, 1], color='m')
+ford_stock['Returns'].plot(kind='kde', figsize=(12, 8), label='Ford', ax=axes2[0, 1], color='g')
+gm_stock['Returns'].plot(kind='kde', figsize=(12, 8), label='GM', ax=axes2[0, 1], color='b')
 plt7.legend()
 
+#for box plot, we need all the data to be in the same dataframe
+box_df = pd.concat([tesla_stock['Returns'],ford_stock['Returns'],gm_stock['Returns']], axis=1)
+box_df.columns = ['Tesla Returns', 'Ford Returns', 'GM Returns']
+plt8 = box_df.plot(kind='box', figsize=(12,8), ax=axes2[1,0])
+
+plt9 = box_df.plot(kind='scatter', x='Ford Returns', y='GM Returns', figsize=(12, 8), ax=axes2[1,1], alpha = 0.4)
 
 plt.tight_layout()
 
 plt5 = scatter_matrix(car_companies, figsize=(8,8), alpha=0.2, hist_kwds={'bins': 50}) #use alpha to adjust data point transparency
+plt10 = scatter_matrix(box_df, figsize=(8, 8), alpha=0.2, hist_kwds={
+                      'bins': 100})  # use alpha to adjust data point transparency
 
 plt.show()
 
