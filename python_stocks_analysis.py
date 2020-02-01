@@ -26,6 +26,9 @@ def moving_average(df, days):
 def returns(df):
     return df['Close']/df['Close'].shift(1) - 1
 
+def cumu_returns(df):
+    return (1 + tesla_stock['Returns']).cumprod()
+
 tesla_stock = stock_printer(start_date, end_date, 'TSLA')
 # print(tesla_stock)
 tesla_stock['Total Traded'] = total_traded(tesla_stock)
@@ -38,14 +41,17 @@ tesla_values = [tuple(vals) for vals in tesla_reset[[
     'date_ax', 'Open', 'High', 'Low', 'Close']].values]
 # print(tesla_values)
 tesla_stock['Returns'] = returns(tesla_stock)
+tesla_stock['Cumulative Returns'] = cumu_returns(tesla_stock)
 
 ford_stock = stock_printer(start_date, end_date, 'F')
 ford_stock['Total Traded'] = total_traded(ford_stock)
 ford_stock['Returns'] = returns(ford_stock)
+ford_stock['Cumulative Returns'] = cumu_returns(ford_stock)
 
 gm_stock = stock_printer(start_date, end_date, 'GM')
 gm_stock['Total Traded'] = total_traded(gm_stock)
 gm_stock['Returns'] = returns(gm_stock)
+gm_stock['Cumulative Returns'] = cumu_returns(gm_stock)
 
 ''' Print out the maxima in the stock prices'''
 tesla_max, ford_max, gm_max = map(lambda x: x.idxmax(), [tesla_stock['Total Traded'], ford_stock['Total Traded'], gm_stock['Total Traded']])
